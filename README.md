@@ -1,6 +1,11 @@
 # VALAK
 **VALAK** is a powerful ESP32-based tool that performs real Evil Twin attacks by creating identical clones of existing WiFi networks.
 
+## VALAK in Action
+
+https://github.com/user-attachments/assets/78fa1002-8b8d-48a3-80e4-9649786d8101
+
+
 ## Security Research & Educational Purpose
 
 **VALAK** is developed for **security research, WiFi penetration testing, and educational purposes**. The project demonstrates how Evil Twin attacks and WiFi credential harvesting techniques can be implemented using an **ESP32-based platform** to simulate real-world wireless security threats.

@@ -1,6 +1,30 @@
 # VALAK
 **VALAK** is a powerful ESP32-based WiFi penetration testing tool that performs real Evil Twin attacks by creating identical clones of existing WiFi networks to capture credentials and test network security.
 
+## Security Research & Educational Purpose
+
+**VALAK** is developed for **security research, WiFi penetration testing, and educational purposes**. The project demonstrates how Evil Twin attacks and WiFi credential harvesting techniques can be implemented using an **ESP32-based platform** to simulate real-world wireless security threats.
+
+The goal of this project is to help **cybersecurity students, researchers, and network security professionals** understand how wireless credential harvesting attacks work in practice. By studying these techniques, security practitioners can better identify **malicious access points, rogue networks, and Evil Twin attacks**, improving detection mechanisms and strengthening wireless network defenses.
+
+This project promotes **responsible security research and awareness** about the risks associated with insecure WiFi networks and credential interception. The intention is to help individuals and organizations improve their **wireless security posture** by understanding how these attacks operate.
+
+## Legal Disclaimer
+
+This tool is intended **strictly for authorized security testing, research, and educational purposes only**.
+
+By using this software, you agree that:
+
+- You will only use this tool on **networks you own** or **have explicit written permission to test**.
+- You will **not use this tool for illegal WiFi attacks, credential harvesting, or any malicious activities**.
+- Any misuse of this software is **the sole responsibility of the user**.
+- The developer **assumes no liability** and is **not responsible for any misuse, damage, or legal consequences** caused by this tool.
+- Users must comply with **all applicable local, state, national, and international laws**.
+- Unauthorized use of this tool may violate **cybersecurity, privacy, and computer misuse laws**.
+- The author of this project is **not responsible for any illegal use or misuse of this software**.
+
+Use responsibly and ethically.
+
 ## Features
 
 - Creates identical clones of any WiFi network by copying the exact SSID name

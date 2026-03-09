@@ -73,7 +73,7 @@ Use responsibly and ethically.
 ## Admin Panel
 After connecting to VALAK's WiFi, open browser and go to `http://192.168.1.1/pass` to access the control panel.
 
-## 📡 Access Points
+## Access Points
 
 | URL | Page Type |
 |-----|-----------|
@@ -98,3 +98,6 @@ http://192.168.1.1/pass
          └── [Brand]    →  Modify router identity
 
 ```
+
+## License
+This project is licensed under the MIT License.

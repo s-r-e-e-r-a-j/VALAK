@@ -47,3 +47,25 @@ Use responsibly and ethically.
 - Stores over 70 passwords simultaneously
 - Hosts access point at `192.168.1.1`
 - Runs web server on port 80 serving a professional phishing page that captures passwords
+
+## Installation
+
+### Requirements
+- ESP32 development board
+- USB cable
+- Arduino IDE
+
+### Steps
+1. Install ESP32 board package in Arduino IDE
+  
+2. Download the VALAK code
+
+3. Open VALAK.ino in Arduino IDE
+
+4. Select your ESP32 board from Tools → Board
+  
+5. Select the correct COM port
+
+6. Click Upload button
+
+7. Wait for compilation and upload to complete

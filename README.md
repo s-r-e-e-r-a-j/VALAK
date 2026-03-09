@@ -69,3 +69,32 @@ Use responsibly and ethically.
 6. Click Upload button
 
 7. Wait for compilation and upload to complete
+
+## Admin Panel
+After connecting to VALAK's WiFi, open browser and go to `http://192.168.1.1/pass` to access the control panel.
+
+## 📡 Access Points
+
+| URL | Page Type |
+|-----|-----------|
+| `http://192.168.1.1` | Main phishing page |
+| `http://192.168.1.1/pass` | Password viewer with admin controls |
+| `http://192.168.1.1/clear` | Clear all credentials |
+| `http://192.168.1.1/ssid` | Change SSID settings |
+| `http://192.168.1.1/footer` | Modify footer text |
+| `http://192.168.1.1/brand` | Change router identity |
+| `http://192.168.1.1/ssid?name=X` | Instant SSID change |
+
+
+## Admin Control Center
+**All administration is done from the passwords page:**
+
+```text
+http://192.168.1.1/pass
+         │
+         ├── [Clear]    →  Clears all passwords
+         ├── [Settings] →  Change SSID name
+         ├── [Footer]   →  Edit copyright text
+         └── [Brand]    →  Modify router identity
+
+```

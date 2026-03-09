@@ -21,4 +21,5 @@
 - Handles up to 8 concurrent victim connections
 - Runs on ESP32 platform with 512 bytes EEPROM storage
 - Stores over 70 passwords simultaneously
-- Hosts access point at 192.168.1.1 - Runs web server on port 80 serving a professional phishing page that captures passwords
+- Hosts access point at `192.168.1.1`
+- Runs web server on port 80 serving a professional phishing page that captures passwords

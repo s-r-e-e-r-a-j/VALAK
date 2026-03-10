@@ -104,10 +104,8 @@ http://192.168.1.1/pass
          ├── [Clear]    →  Clears all passwords
          ├── [Settings] →  Change SSID name
          ├── [Footer]   →  Edit copyright text
-         ├── [Brand]    →
-Modify router identity   
-         └── [Logout]    →
-For Logout
+         ├── [Brand]    →  Modify router identity   
+         └── [Logout]   →  For Logout
 
 ```
 

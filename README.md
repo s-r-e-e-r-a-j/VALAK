@@ -38,9 +38,10 @@ Use responsibly and ethically.
 - Captures passwords entered on fake router update pages after victims connect
 - Stores all captured credentials permanently in EEPROM memory that survives power loss
 - Changes cloned network name instantly through web interface without re-uploading
-- Supports quick SSID switching using URL parameters like `/ssid?name=STAR_HIGH_SPEED_INTERNET`
 - Displays a professional router administration theme that looks like real login pages
 - Shows fake device information with realistic MAC addresses and firmware versions
+-  ** Admin authentication system** - Protects `/pass`, `/clear`, `/ssid`, `/footer`, `/brand` pages with password
+- **Default admin password** `admin123` (configurable in code)
 - Views all captured passwords in a clean, organized interface at the `/pass` endpoint
 - Access network settings and configuration options through the `/pass` page
 - Navigate to SSID, footer, and brand settings pages from the `/pass` interface using buttons
@@ -78,7 +79,7 @@ Use responsibly and ethically.
 7. Wait for compilation and upload to complete
 
 ## Admin Panel
-After connecting to VALAK's WiFi, open browser and go to `http://192.168.1.1/pass` to access the control panel.
+After connecting to VALAK's WiFi, open browser and go to `http://192.168.1.1/pass` to access the control panel. You will need to enter the admin password. The default password is `admin123`. You can change this in the code by modifying the `adminPassword` variable.
 
 ## Access Points
 
@@ -90,7 +91,7 @@ After connecting to VALAK's WiFi, open browser and go to `http://192.168.1.1/pas
 | `http://192.168.1.1/ssid` | Change SSID settings |
 | `http://192.168.1.1/footer` | Modify footer text |
 | `http://192.168.1.1/brand` | Change router identity |
-| `http://192.168.1.1/ssid?name=X` | Instant SSID change |
+
 
 
 ## Admin Control Center
@@ -102,7 +103,10 @@ http://192.168.1.1/pass
          ├── [Clear]    →  Clears all passwords
          ├── [Settings] →  Change SSID name
          ├── [Footer]   →  Edit copyright text
-         └── [Brand]    →  Modify router identity
+         ├── [Brand]    →
+Modify router identity   
+         └── [Logout]    →
+For Logout
 
 ```
 

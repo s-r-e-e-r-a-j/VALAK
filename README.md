@@ -37,7 +37,7 @@ Use responsibly and ethically.
 - Changes cloned network name instantly through web interface without re-uploading
 - Displays a professional router administration theme that looks like real login pages
 - Shows fake device information with realistic MAC addresses and firmware versions
--  ** Admin authentication system** - Protects `/pass`, `/clear`, `/ssid`, `/footer`, `/brand` pages with password
+-  **Admin authentication system** - Protects `/pass`, `/clear`, `/ssid`, `/footer`, `/brand` pages with password
 - **Default admin password** `admin123` (configurable in code)
 - Supports quick SSID switching using URL parameters like `/ssid?name=STAR_HIGH_SPEED_INTERNET`
 - Views all captured passwords in a clean, organized interface at the `/pass` endpoint

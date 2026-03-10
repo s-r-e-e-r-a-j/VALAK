@@ -3,10 +3,7 @@
 
 ## VALAK in Action
 
-https://github.com/user-attachments/assets/7948f107-c219-4b93-a122-9849da337667
-
-
-
+https://github.com/user-attachments/assets/fa92881a-327c-4552-970c-2bc52738a119
 
 ## Security Research & Educational Purpose
 

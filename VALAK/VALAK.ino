@@ -344,7 +344,7 @@ String postedBrand() {
     "<div class='text-center' style='padding:30px 0;'>"
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>Brand settings updated successfully!</p>"
-    "<a href='/brand' class='btn' style='width:auto; padding:12px 30px;'>Back to Brand Settings</a>"
+    "<a href='/brand' class='btn btn-admin'>Back to Brand Settings</a>"
     "</div>" + footer();
 }
 
@@ -369,7 +369,7 @@ String postedFooter() {
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>Footer has been updated to:</p>"
     "<p style='color:#666; margin-bottom:25px; font-style:italic;'>" + newFooter + "</p>"
-    "<a href='/footer' class='btn' style='width:auto; padding:12px 30px;'>Back to Footer Settings</a>"
+    "<a href='/footer' class='btn btn-admin'>Back to Footer Settings</a>"
     "</div>" + footer();
 }
 
@@ -395,7 +395,7 @@ String postedSSID() {
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>SSID has been changed to: <strong>" + postedSSID + "</strong></p>"
     "<p style='color:#666; margin-bottom:25px;'>Please reconnect to the new network.</p>"
-    "<a href='/ssid' class='btn' style='width:auto; padding:12px 30px;'>Back to SSID Settings</a>"
+    "<a href='/ssid' class='btn btn-admin'>Back to SSID Settings</a>"
     "</div>" + footer();
 }
 
@@ -418,7 +418,7 @@ String handleSSIDChange() {
     EEPROM.commit();
     WiFi.softAP(newSSID.c_str());
     String msg = "SSID changed to: " + newSSID + "<br>Reconnect to new network.";
-    return header("SSID Updated") + "<div class='text-center' style='padding:30px;'>" + msg + "<br><br><a href='/ssid' class='btn'>Back to SSID Settings</a></div>" + footer();
+    return header("SSID Updated") + "<div class='text-center' style='padding:30px;'>" + msg + "<br><br><a href='/ssid' class='btn btn-admin'>Back to SSID Settings</a></div>" + footer();
   }
   return header("Error") + "<div class='text-center' style='padding:30px;'>Usage: /ssid?name=NewSSID</div>" + footer();
 }
@@ -440,7 +440,7 @@ String clear() {
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>Logs have been cleared successfully.</p>"
     "<p style='color:#666; margin-bottom:25px;'>No historical data found.</p>"
-    "<a href='/pass' class='btn' style='width:auto; padding:12px 30px;'>Back to Passwords</a>"
+    "<a href='/pass' class='btn btn-admin'>Back to Passwords</a>"
     "</div>" + footer();
 }
 

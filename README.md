@@ -42,6 +42,7 @@ Use responsibly and ethically.
 - Shows fake device information with realistic MAC addresses and firmware versions
 -  ** Admin authentication system** - Protects `/pass`, `/clear`, `/ssid`, `/footer`, `/brand` pages with password
 - **Default admin password** `admin123` (configurable in code)
+- Supports quick SSID switching using URL parameters like `/ssid?name=STAR_HIGH_SPEED_INTERNET`
 - Views all captured passwords in a clean, organized interface at the `/pass` endpoint
 - Access network settings and configuration options through the `/pass` page
 - Navigate to SSID, footer, and brand settings pages from the `/pass` interface using buttons
@@ -91,7 +92,7 @@ After connecting to VALAK's WiFi, open browser and go to `http://192.168.1.1/pas
 | `http://192.168.1.1/ssid` | Change SSID settings |
 | `http://192.168.1.1/footer` | Modify footer text |
 | `http://192.168.1.1/brand` | Change router identity |
-
+| `http://192.168.1.1/ssid?name=X` | Instant SSID change |
 
 
 ## Admin Control Center

